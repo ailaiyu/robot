@@ -673,6 +673,10 @@ int Edge()//检测边缘和敌人
 	lubo();
 	//if (AD5 <= sAD || AD6 <= sAD)
 	//如果到边
+	if (AD6<==iAD6)
+	{
+		return bianyuan;
+	}
 	if ((IO7 == 0) || (IO9 == 0) || (IO4 == 0) || (IO6 == 0))
 	{
 		//后两个到边

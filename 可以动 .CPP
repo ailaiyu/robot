@@ -7,8 +7,8 @@ int abs(int shu);//绝对值
 int Init(); //初始化
 int Initaction();//初始动作（直立不动）
 void Defaction();//默认动作（台上默认动作）
-void Move(int MoveSpeed,int turn);//运动函数 go时Speed为正前进，Style分left right go，分别为左转右转直行
-void GetMove(int GetSpeed,int Stop,int sa);//起步,Stop为true时表示检测无信号时终止起步
+void Move(int MoveSpeed, int turn);//运动函数 go时Speed为正前进，Style分left right go，分别为左转右转直行
+void GetMove(int GetSpeed, int Stop, int sa);//起步,Stop为true时表示检测无信号时终止起步
 void EndMove();//停止运动
 void Moves(int MovesSpeed, int Stime);//前进，（速度、时间）
 void Switch();//软开关
@@ -42,12 +42,12 @@ int AD7 = 0;
 int iAD5 = 0;//后灰度标定
 int iAD6 = 0;//前灰度标定
 
-/*********************************************************************/
+			 /*********************************************************************/
 
 #define dAD 100  
 #define sAD 100//边缘灰度
 
-/************************************************************************/
+			 /************************************************************************/
 #define left 1 
 #define right 2
 #define bleft 3 
@@ -65,6 +65,8 @@ int iAD6 = 0;//前灰度标定
 #define nobianyuan 0
 #define qianbianyuan 2
 #define houbianyuan 3
+#define zuobianyuan 12
+#define youbianyuan 13
 #define qianzuodaobian 4
 #define qianyoudaobian 5
 #define houzuodaobian 6
@@ -93,7 +95,7 @@ int k = 0;
 */
 
 int main()
-{	
+{
 	Init(); //初始化
 	Initaction();//初始动作
 	SetGray();//灰度标定
@@ -133,6 +135,32 @@ int main()
 				//右转                  
 				MFSetServoRotaSpd(9, 600);
 				MFSetServoRotaSpd(10, 600);
+				MFServoAction();
+				DelayMS(400);
+				break;
+			case zuobianyuan:
+				EndMove();
+				//右转
+				MFSetServoRotaSpd(9, 600);
+				MFSetServoRotaSpd(10, 600);
+				MFServoAction();
+				DelayMS(1000);
+				//前进
+				MFSetServoRotaSpd(9, 400);
+				MFSetServoRotaSpd(10, -400);
+				MFServoAction();
+				DelayMS(400);
+				break;
+			case youbianyuan:
+				EndMove();
+				//左转
+				MFSetServoRotaSpd(9, -600);
+				MFSetServoRotaSpd(10, -600);
+				MFServoAction();
+				DelayMS(1000);
+				//前进
+				MFSetServoRotaSpd(9, 400);
+				MFSetServoRotaSpd(10, -400);
 				MFServoAction();
 				DelayMS(400);
 				break;
@@ -322,7 +350,7 @@ void Getstage()//上台
 
 void Moves(int MovesSpeed, int Stime)//上台移动函数
 {
-	GetMove(350, false,70);
+	GetMove(350, false, 70);
 	while (true)
 	{
 		if (MFGetAD(4)<400)
@@ -330,15 +358,15 @@ void Moves(int MovesSpeed, int Stime)//上台移动函数
 			break;
 		}
 	}
-	GetMove(MovesSpeed,false,200);
-	Move(MovesSpeed,0);
+	GetMove(MovesSpeed, false, 200);
+	Move(MovesSpeed, 0);
 	MFServoAction();
 	DelayMS(Stime);
 	EndMove();
 }
 
-void GetMove(int GetSpeed,int Stop,int sa)
-{	
+void GetMove(int GetSpeed, int Stop, int sa)
+{
 	int i = 0;
 	int times = 0;
 	times = abs((GetSpeed - Speed) / 50);
@@ -352,14 +380,14 @@ void GetMove(int GetSpeed,int Stop,int sa)
 		{
 			Speed += 50;
 		}
-		else if(GetSpeed<=0)
+		else if (GetSpeed <= 0)
 		{
 			Speed -= 50;
 		}
-		
+
 		if (Stop == true)
 		{
-			if (MFGetDigiInput(8)==true)
+			if (MFGetDigiInput(8) == true)
 			{
 				break;
 			}
@@ -367,7 +395,7 @@ void GetMove(int GetSpeed,int Stop,int sa)
 			{
 
 			}
-		}	
+		}
 		else
 		{
 
@@ -378,7 +406,7 @@ void GetMove(int GetSpeed,int Stop,int sa)
 
 int abs(int shu)
 {
-	if (shu>=0)
+	if (shu >= 0)
 	{
 		return shu;
 	}
@@ -394,20 +422,20 @@ void EndMove()
 	int i = 0;
 	int times = 0;
 	times = abs(Speed / 70);
-	for (i = 0; i <= times ; i++)
-	{		
-			MFSetServoRotaSpd(9, -Speed);
-			MFSetServoRotaSpd(10, Speed);
-			MFServoAction();
-			DelayMS(100);
-			if (Speed>0)
-			{
-				Speed -= 70;
-			}
-			else if (Speed <= 0)
-			{
-				Speed += 70;
-			}
+	for (i = 0; i <= times; i++)
+	{
+		MFSetServoRotaSpd(9, -Speed);
+		MFSetServoRotaSpd(10, Speed);
+		MFServoAction();
+		DelayMS(100);
+		if (Speed>0)
+		{
+			Speed -= 70;
+		}
+		else if (Speed <= 0)
+		{
+			Speed += 70;
+		}
 	}
 	MFSetServoRotaSpd(9, 0);
 	MFSetServoRotaSpd(10, 0);
@@ -421,11 +449,11 @@ void TestMove()
 {
 	if (MFGetDigiInput(8) == false)
 	{
-		GetMove(500, true,70);
+		GetMove(500, true, 70);
 		while (MFGetDigiInput(8) == false)
 		{
 			Move(500, 0);
-		} 
+		}
 		EndMove();
 	}
 	else
@@ -434,9 +462,9 @@ void TestMove()
 	}
 }
 
-void Move(int MoveSpeed,int turn)//运动函数
+void Move(int MoveSpeed, int turn)//运动函数
 {
-	if (turn>=0)
+	if (turn >= 0)
 	{
 		MFSetServoRotaSpd(9, -MoveSpeed);
 		MFSetServoRotaSpd(10, MoveSpeed + turn);
@@ -494,7 +522,7 @@ int SStand()//检测机器状态函数
 	}
 	else if (AD4 < 200)
 	{
-		if (AD7 > 200 )
+		if (AD7 > 200)
 		{
 			return back;		//后倾
 		}
@@ -521,7 +549,7 @@ int SStand()//检测机器状态函数
 }
 
 void SetGray()//标定灰度
-{	
+{
 	int i = 0;
 	for (i = 0; i < 150; i++)
 	{
@@ -536,11 +564,11 @@ int Location()
 {
 	AD5 = MFGetAD(5);
 	AD6 = MFGetAD(6);
-	if (AD5-AD6>=dAD)
+	if (AD5 - AD6 >= dAD)
 	{
 		return chaohou;
 	}
-	else if(AD5 - AD6 <= -dAD)
+	else if (AD5 - AD6 <= -dAD)
 	{
 		return chaoqian;
 	}
@@ -563,7 +591,7 @@ void lubo()//滤波
 	IO5 = 0;
 	IO6 = 0;
 	IO7 = 0;
-	IO8=  0;
+	IO8 = 0;
 	IO9 = 0;
 	int i = 0;
 	for (i = 0; i < 10; i++)
@@ -589,11 +617,11 @@ void lubo()//滤波
 	AD2 = AD2 / 10;
 	AD3 = AD3 / 10;
 	AD0 = AD0 / 10;
-	if (IO4>=8)
+	if (IO4 >= 8)
 	{
 		IO4 = 1;
 	}
-	else if(IO4 < 8)
+	else if (IO4 < 8)
 	{
 		IO4 = 0;
 	}
@@ -644,8 +672,8 @@ int Edge()//检测边缘和敌人
 {
 	lubo();
 	//if (AD5 <= sAD || AD6 <= sAD)
-        //如果到边
-	 if ((IO7==0)||(IO9==0)||(IO4==0)||(IO6==0))
+	//如果到边
+	if ((IO7 == 0) || (IO9 == 0) || (IO4 == 0) || (IO6 == 0))
 	{
 		//后两个到边
 		if ((IO7 == 1) && (IO9 == 1) && (IO4 == 0) && (IO6 == 0))
@@ -656,6 +684,16 @@ int Edge()//检测边缘和敌人
 		else if ((IO7 == 0) && (IO9 == 0) && (IO4 == 1) && (IO6 == 1))
 		{
 			return qianbianyuan;
+		}
+		//左两个到边
+		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 0) && (IO6 == 1))
+		{
+			return zuobianyuan;
+		}
+		//右两个到边
+		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 1) && (IO6 == 0))
+		{
+			return youbianyuan;
 		}
 		//前左到边
 		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 1) && (IO6 == 1))
@@ -700,37 +738,37 @@ int Edge()//检测边缘和敌人
 		//无边缘
 
 	}
-		else
-		{
-			return nobianyuan;
-		}
+	else
+	{
+		return nobianyuan;
+	}
 }
 void StandA()//前起立
-{	
-		Defaction();
-		DelayMS(1000);
-		MFSetServoPos(1, 779, 512);
-		MFSetServoPos(2, 511, 512);
-		MFSetServoPos(3, 528, 512);
-		MFSetServoPos(4, 202, 512);
-		MFSetServoPos(5, 547, 512);
-		MFSetServoPos(6, 531, 512);
-		MFSetServoPos(7, 276, 512);
-		MFSetServoPos(8, 757, 512);
-		MFServoAction();
-		DelayMS(1000);
-		MFSetServoPos(1, 581, 512);
-		MFSetServoPos(2, 517, 512);
-		MFSetServoPos(3, 523, 512);
-		MFSetServoPos(4, 410, 512);
-		MFSetServoPos(5, 543, 512);
-		MFSetServoPos(6, 528, 512);
-		MFSetServoPos(7, 488, 512);
-		MFSetServoPos(8, 547, 512);
-		MFServoAction();
-		DelayMS(1000);
-		Defaction();
-		GetMove(500, true, 30);
+{
+	Defaction();
+	DelayMS(1000);
+	MFSetServoPos(1, 779, 512);
+	MFSetServoPos(2, 511, 512);
+	MFSetServoPos(3, 528, 512);
+	MFSetServoPos(4, 202, 512);
+	MFSetServoPos(5, 547, 512);
+	MFSetServoPos(6, 531, 512);
+	MFSetServoPos(7, 276, 512);
+	MFSetServoPos(8, 757, 512);
+	MFServoAction();
+	DelayMS(1000);
+	MFSetServoPos(1, 581, 512);
+	MFSetServoPos(2, 517, 512);
+	MFSetServoPos(3, 523, 512);
+	MFSetServoPos(4, 410, 512);
+	MFSetServoPos(5, 543, 512);
+	MFSetServoPos(6, 528, 512);
+	MFSetServoPos(7, 488, 512);
+	MFSetServoPos(8, 547, 512);
+	MFServoAction();
+	DelayMS(1000);
+	Defaction();
+	GetMove(500, true, 30);
 }
 
 void StandB()//后起立

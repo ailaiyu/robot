@@ -21,7 +21,8 @@ void StandB();//后起立
 void TestMove();//移动测试
 void Attack1();//攻击动作1
 
-int AD = 0;
+
+int AD = 0;//AD转换
 
 int IO4 = 0;//后左
 int IO5 = 0;//后中

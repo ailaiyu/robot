@@ -1,51 +1,51 @@
-ï»¿#include  "Apps/SystemTask.h"
+#include  "Apps/SystemTask.h"
 
 uint8 SERVO_MAPPING[10] = { 1,2,3,4,5,6,7,8,9,10 };
 
-int abs(int shu);//ç»å¯¹å€¼
+int abs(int shu);//¾ø¶ÔÖµ
 
-int Init(); //åˆå§‹åŒ–
-int Initaction();//åˆå§‹åŠ¨ä½œï¼ˆç›´ç«‹ä¸åŠ¨ï¼‰
-void Defaction();//é»˜è®¤åŠ¨ä½œï¼ˆå°ä¸Šé»˜è®¤åŠ¨ä½œï¼‰
-void Move(int MoveSpeed, int turn);//è¿åŠ¨å‡½æ•° goæ—¶Speedä¸ºæ­£å‰è¿›ï¼ŒStyleåˆ†left right goï¼Œåˆ†åˆ«ä¸ºå·¦è½¬å³è½¬ç›´è¡Œ
-void GetMove(int GetSpeed, int Stop, int sa);//èµ·æ­¥,Stopä¸ºtrueæ—¶è¡¨ç¤ºæ£€æµ‹æ— ä¿¡å·æ—¶ç»ˆæ­¢èµ·æ­¥
-void EndMove();//åœæ­¢è¿åŠ¨
-void Moves(int MovesSpeed, int Stime);//å‰è¿›ï¼Œï¼ˆé€Ÿåº¦ã€æ—¶é—´ï¼‰
-void Switch();//è½¯å¼€å…³
-void Getstage();//ä¸Šå°
-void lubo();//æ»¤æ³¢
-int SStand();//æ£€æµ‹æœºå™¨çŠ¶æ€å‡½æ•°
-int Edge();//æ£€æµ‹è¾¹ç¼˜å’Œæ•Œäºº
-void StandA();//å‰èµ·ç«‹
-void StandB();//åèµ·ç«‹
-void TestMove();//ç§»åŠ¨æµ‹è¯•
-void Attack1();//æ”»å‡»åŠ¨ä½œ1
+int Init(); //³õÊ¼»¯
+int Initaction();//³õÊ¼¶¯×÷£¨Ö±Á¢²»¶¯£©
+void Defaction();//Ä¬ÈÏ¶¯×÷£¨Ì¨ÉÏÄ¬ÈÏ¶¯×÷£©
+void Move(int MoveSpeed, int turn);//ÔË¶¯º¯Êı goÊ±SpeedÎªÕıÇ°½ø£¬Style·Öleft right go£¬·Ö±ğÎª×ó×ªÓÒ×ªÖ±ĞĞ
+void GetMove(int GetSpeed, int Stop, int sa);//Æğ²½,StopÎªtrueÊ±±íÊ¾¼ì²âÎŞĞÅºÅÊ±ÖÕÖ¹Æğ²½
+void EndMove();//Í£Ö¹ÔË¶¯
+void Moves(int MovesSpeed, int Stime);//Ç°½ø£¬£¨ËÙ¶È¡¢Ê±¼ä£©
+void Switch();//Èí¿ª¹Ø
+void Getstage();//ÉÏÌ¨
+void lubo();//ÂË²¨
+int SStand();//¼ì²â»úÆ÷×´Ì¬º¯Êı
+int Edge();//¼ì²â±ßÔµºÍµĞÈË
+void StandA();//Ç°ÆğÁ¢
+void StandB();//ºóÆğÁ¢
+void TestMove();//ÒÆ¶¯²âÊÔ
+void Attack1();//¹¥»÷¶¯×÷1
 
 int AD = 0;
 
-int IO4 = 0;//åå·¦
-int IO5 = 0;//åä¸­
-int IO6 = 0;//åå³
-int IO7 = 0;//å‰å·¦
-int IO8 = 0;//å‰ä¸­
-int IO9 = 0;//å‰å³
+int IO4 = 0;//ºó×ó
+int IO5 = 0;//ºóÖĞ
+int IO6 = 0;//ºóÓÒ
+int IO7 = 0;//Ç°×ó
+int IO8 = 0;//Ç°ÖĞ
+int IO9 = 0;//Ç°ÓÒ
 
-int AD0 = 0;//å¤´
-int AD1 = 0;//å³è¾¹
-int AD2 = 0;//å‰
-int AD3 = 0;//å·¦è¾¹
-int AD4 = 0;//å€¾è§’
-int AD5 = 0;//ç°åº¦å
-int AD6 = 0;//ç°åº¦å‰
+int AD0 = 0;//Í·
+int AD1 = 0;//ÓÒ±ß
+int AD2 = 0;//Ç°
+int AD3 = 0;//×ó±ß
+int AD4 = 0;//Çã½Ç
+int AD5 = 0;//»Ò¶Èºó
+int AD6 = 0;//»Ò¶ÈÇ°
 int AD7 = 0;
 
-int iAD5 = 0;//åç°åº¦æ ‡å®š
-int iAD6 = 0;//å‰ç°åº¦æ ‡å®š
+int iAD5 = 0;//ºó»Ò¶È±ê¶¨
+int iAD6 = 0;//Ç°»Ò¶È±ê¶¨
 
 			 /*********************************************************************/
 
 #define dAD 100  
-#define sAD 100//è¾¹ç¼˜ç°åº¦
+#define sAD 100//±ßÔµ»Ò¶È
 
 			 /************************************************************************/
 #define left 1 
@@ -55,10 +55,10 @@ int iAD6 = 0;//å‰ç°åº¦æ ‡å®š
 #define go 3
 #define true 1
 #define false 0
-#define no 1  //æ²¡å€’
-#define back 2  //åå€’
-#define front 3 //å‰å€’
-#define others 4  //å…¶ä»–çŠ¶æ€
+#define no 1  //Ã»µ¹
+#define back 2  //ºóµ¹
+#define front 3 //Ç°µ¹
+#define others 4  //ÆäËû×´Ì¬
 #define chaoqian 1
 #define chaohou 2
 #define bianyuan 1
@@ -77,49 +77,49 @@ int iAD6 = 0;//å‰ç°åº¦æ ‡å®š
 #define youhoujiao 11
 #define attack 9
 
-int Speed = 0;//é€Ÿåº¦å€¼
-int State = 1;//å€¾å€’çŠ¶æ€ï¼Œé»˜è®¤1æ²¡å€’
-int nEdge = 0;//è¾¹ç¼˜åˆå§‹æ€
+int Speed = 0;//ËÙ¶ÈÖµ
+int State = 1;//Çãµ¹×´Ì¬£¬Ä¬ÈÏ1Ã»µ¹
+int nEdge = 0;//±ßÔµ³õÊ¼Ì¬
 int k = 0;
 /*
 ************************************************
-æœºå™¨äººå³è¾¹ä¸ºç”µæœº9å·ï¼Œå‰è¿›ä¸º-ï¼Œåé€€+
-æœºå™¨äººå³è¾¹ä¸ºç”µæœº10å·ï¼Œå‰è¿›ä¸º+ï¼Œåé€€-
-ï¼ˆèˆµæœºIDï¼‰å·¦è‡‚ä¸Š 1ï¼Œä¸­ 2ï¼Œä¸‹ 3
-ï¼ˆèˆµæœºIDï¼‰å³è‡‚ä¸Š 4, ä¸­ 5ï¼Œä¸‹ 6
-ï¼ˆèˆµæœºIDï¼‰å³è…¿ 7ï¼Œå·¦è…¿ 8
+»úÆ÷ÈËÓÒ±ßÎªµç»ú9ºÅ£¬Ç°½øÎª-£¬ºóÍË+
+»úÆ÷ÈËÓÒ±ßÎªµç»ú10ºÅ£¬Ç°½øÎª+£¬ºóÍË-
+£¨¶æ»úID£©×ó±ÛÉÏ 1£¬ÖĞ 2£¬ÏÂ 3
+£¨¶æ»úID£©ÓÒ±ÛÉÏ 4, ÖĞ 5£¬ÏÂ 6
+£¨¶æ»úID£©ÓÒÍÈ 7£¬×óÍÈ 8
 *************************************************
-ç”µæœºé€Ÿåº¦èŒƒå›´ï¼ˆ-1023~+1023ï¼‰
-èˆµæœºè§’åº¦èŒƒå›´ï¼ˆ0~+1023ï¼‰ä¸­ä½512 5å·540ä¸ºä¸­é—´ä½ç½®
+µç»úËÙ¶È·¶Î§£¨-1023~+1023£©
+¶æ»ú½Ç¶È·¶Î§£¨0~+1023£©ÖĞÎ»512 5ºÅ540ÎªÖĞ¼äÎ»ÖÃ
 *************************************************
 */
 
 int main()
 {
-	Init(); //åˆå§‹åŒ–
-	Initaction();//åˆå§‹åŠ¨ä½œ
-	SetGray();//ç°åº¦æ ‡å®š
-	Switch();//è½¯å¼€å…³
-	Getstage();//ä¸Šå°
-	Defaction();//é»˜è®¤åŠ¨ä½œ
+	Init(); //³õÊ¼»¯
+	Initaction();//³õÊ¼¶¯×÷
+	SetGray();//»Ò¶È±ê¶¨
+	Switch();//Èí¿ª¹Ø
+	Getstage();//ÉÏÌ¨
+	Defaction();//Ä¬ÈÏ¶¯×÷
 
 	while (true)
 	{
-		State = SStand();//æ£€æµ‹å€¾å€’
+		State = SStand();//¼ì²âÇãµ¹
 		switch (State)
 		{
 		case no:
-			nEdge = Edge();//æ£€æµ‹ä½ç½®
+			nEdge = Edge();//¼ì²âÎ»ÖÃ
 			switch (nEdge)
 			{
 			case houbianyuan:
 				EndMove();
-				//å‰è¿›
+				//Ç°½ø
 				MFSetServoRotaSpd(9, 400);
 				MFSetServoRotaSpd(10, -400);
 				MFServoAction();
 				DelayMS(500);
-				//å³è½¬                  
+				//ÓÒ×ª                  
 				MFSetServoRotaSpd(9, 600);
 				MFSetServoRotaSpd(10, 600);
 				MFServoAction();
@@ -127,12 +127,12 @@ int main()
 				break;
 			case qianbianyuan:
 				EndMove();
-				//åé€€
+				//ºóÍË
 				MFSetServoRotaSpd(9, -550);
 				MFSetServoRotaSpd(10, 550);
 				MFServoAction();
 				DelayMS(500);
-				//å³è½¬                  
+				//ÓÒ×ª                  
 				MFSetServoRotaSpd(9, 600);
 				MFSetServoRotaSpd(10, 600);
 				MFServoAction();
@@ -140,12 +140,12 @@ int main()
 				break;
 			case zuobianyuan:
 				EndMove();
-				//å³è½¬
+				//ÓÒ×ª
 				MFSetServoRotaSpd(9, 600);
 				MFSetServoRotaSpd(10, 600);
 				MFServoAction();
 				DelayMS(1000);
-				//å‰è¿›
+				//Ç°½ø
 				MFSetServoRotaSpd(9, 400);
 				MFSetServoRotaSpd(10, -400);
 				MFServoAction();
@@ -153,12 +153,12 @@ int main()
 				break;
 			case youbianyuan:
 				EndMove();
-				//å·¦è½¬
+				//×ó×ª
 				MFSetServoRotaSpd(9, -600);
 				MFSetServoRotaSpd(10, -600);
 				MFServoAction();
 				DelayMS(1000);
-				//å‰è¿›
+				//Ç°½ø
 				MFSetServoRotaSpd(9, 400);
 				MFSetServoRotaSpd(10, -400);
 				MFServoAction();
@@ -166,12 +166,12 @@ int main()
 				break;
 			case qianzuodaobian:
 				EndMove();
-				//åé€€                 
+				//ºóÍË                 
 				MFSetServoRotaSpd(9, -550);
 				MFSetServoRotaSpd(10, 550);
 				MFServoAction();
 				DelayMS(500);
-				//å³è½¬                    
+				//ÓÒ×ª                    
 				MFSetServoRotaSpd(9, 600);
 				MFSetServoRotaSpd(10, 600);
 				MFServoAction();
@@ -179,12 +179,12 @@ int main()
 				break;
 			case qianyoudaobian:
 				EndMove();
-				//åé€€                    
+				//ºóÍË                    
 				MFSetServoRotaSpd(9, -550);
 				MFSetServoRotaSpd(10, 550);
 				MFServoAction();
 				DelayMS(500);
-				//å·¦è½¬                    ;
+				//×ó×ª                    ;
 				MFSetServoRotaSpd(9, -600);
 				MFSetServoRotaSpd(10, -600);
 				MFServoAction();
@@ -192,12 +192,12 @@ int main()
 				break;
 			case houzuodaobian:
 				EndMove();
-				//å‰è¿›                  
+				//Ç°½ø                  
 				MFSetServoRotaSpd(9, 400);
 				MFSetServoRotaSpd(10, -400);
 				MFServoAction();
 				DelayMS(500);
-				//å³è½¬                   
+				//ÓÒ×ª                   
 				MFSetServoRotaSpd(9, 600);
 				MFSetServoRotaSpd(10, 600);
 				MFServoAction();
@@ -205,12 +205,12 @@ int main()
 				break;
 			case houyoudaobian:
 				EndMove();
-				//å‰è¿›                   
+				//Ç°½ø                   
 				MFSetServoRotaSpd(9, 400);
 				MFSetServoRotaSpd(10, -400);
 				MFServoAction();
 				DelayMS(500);
-				//å·¦è½¬                 
+				//×ó×ª                 
 				MFSetServoRotaSpd(9, -600);
 				MFSetServoRotaSpd(10, -600);
 				MFServoAction();
@@ -218,7 +218,7 @@ int main()
 				break;
 			case zuoqianjiao:
 				EndMove();
-				//åé€€å³è½¬                   
+				//ºóÍËÓÒ×ª                   
 				MFSetServoRotaSpd(9, -600);
 				MFSetServoRotaSpd(10, 400);
 				MFServoAction();
@@ -226,7 +226,7 @@ int main()
 				break;
 			case zuohoujiao:
 				EndMove();
-				//å‰è¡Œå³è½¬                 
+				//Ç°ĞĞÓÒ×ª                 
 				MFSetServoRotaSpd(9, 500);
 				MFSetServoRotaSpd(10, -300);
 				MFServoAction();
@@ -234,7 +234,7 @@ int main()
 				break;
 			case youqianjiao:
 				EndMove();
-				//åé€€å³è½¬                   
+				//ºóÍËÓÒ×ª                   
 				MFSetServoRotaSpd(9, -400);
 				MFSetServoRotaSpd(10, 600);
 				MFServoAction();
@@ -242,7 +242,7 @@ int main()
 				break;
 			case youhoujiao:
 				EndMove();
-				//å‰è¡Œå·¦è½¬                
+				//Ç°ĞĞ×ó×ª                
 				MFSetServoRotaSpd(9, 300);
 				MFSetServoRotaSpd(10, -500);
 				MFServoAction();
@@ -287,7 +287,7 @@ int main()
 	}
 }
 
-int Init() //åˆå§‹åŒ–
+int Init() //³õÊ¼»¯
 {
 	MFInit();
 	DelayMS(1000);
@@ -308,7 +308,7 @@ int Init() //åˆå§‹åŒ–
 	return 0;
 }
 
-int Initaction() //åˆå§‹åŠ¨ä½œï¼ˆç›´ç«‹ä¸åŠ¨ï¼‰
+int Initaction() //³õÊ¼¶¯×÷£¨Ö±Á¢²»¶¯£©
 {
 	MFSetServoPos(1, 478, 512);
 	MFSetServoPos(2, 526, 512);
@@ -325,7 +325,7 @@ int Initaction() //åˆå§‹åŠ¨ä½œï¼ˆç›´ç«‹ä¸åŠ¨ï¼‰
 	return 0;
 }
 
-void Getstage()//ä¸Šå°
+void Getstage()//ÉÏÌ¨
 {
 	MFSetServoPos(1, 489, 512);
 	MFSetServoPos(2, 523, 512);
@@ -339,7 +339,7 @@ void Getstage()//ä¸Šå°
 	MFSetServoPos(8, 845, 512);
 	MFServoAction();
 	DelayMS(1000);
-	Moves(700, 1000);//ä¸Šå°é€Ÿåº¦ã€æ—¶é•¿æ§åˆ¶
+	Moves(700, 1000);//ÉÏÌ¨ËÙ¶È¡¢Ê±³¤¿ØÖÆ
 	DelayMS(600);
 	EndMove();
 	MFSetServoPos(7, 530, 512);
@@ -348,7 +348,7 @@ void Getstage()//ä¸Šå°
 	DelayMS(200);
 }
 
-void Moves(int MovesSpeed, int Stime)//ä¸Šå°ç§»åŠ¨å‡½æ•°
+void Moves(int MovesSpeed, int Stime)//ÉÏÌ¨ÒÆ¶¯º¯Êı
 {
 	GetMove(350, false, 70);
 	while (true)
@@ -462,7 +462,7 @@ void TestMove()
 	}
 }
 
-void Move(int MoveSpeed, int turn)//è¿åŠ¨å‡½æ•°
+void Move(int MoveSpeed, int turn)//ÔË¶¯º¯Êı
 {
 	if (turn >= 0)
 	{
@@ -478,7 +478,7 @@ void Move(int MoveSpeed, int turn)//è¿åŠ¨å‡½æ•°
 	}
 }
 
-void Defaction()//é»˜è®¤åŠ¨ä½œï¼ˆå°ä¸Šï¼‰
+void Defaction()//Ä¬ÈÏ¶¯×÷£¨Ì¨ÉÏ£©
 {
 	MFSetServoPos(7, 530, 512);
 	MFSetServoPos(8, 507, 512);
@@ -494,7 +494,7 @@ void Defaction()//é»˜è®¤åŠ¨ä½œï¼ˆå°ä¸Šï¼‰
 	DelayMS(500);
 }
 
-void Switch()//è½¯å¼€å…³
+void Switch()//Èí¿ª¹Ø
 {
 	while (true)
 	{
@@ -502,7 +502,7 @@ void Switch()//è½¯å¼€å…³
 	}
 }
 
-int SStand()//æ£€æµ‹æœºå™¨çŠ¶æ€å‡½æ•°
+int SStand()//¼ì²â»úÆ÷×´Ì¬º¯Êı
 {
 	int i = 0;
 	AD = 0;
@@ -518,13 +518,13 @@ int SStand()//æ£€æµ‹æœºå™¨çŠ¶æ€å‡½æ•°
 	AD7 = AD7 / 10;
 	if (AD4 > 200 && AD4 < 700)
 	{
-		return no;		//æ²¡æœ‰å€’
+		return no;		//Ã»ÓĞµ¹
 	}
 	else if (AD4 < 200)
 	{
 		if (AD7 > 200)
 		{
-			return back;		//åå€¾
+			return back;		//ºóÇã
 		}
 		else
 		{
@@ -535,7 +535,7 @@ int SStand()//æ£€æµ‹æœºå™¨çŠ¶æ€å‡½æ•°
 	{
 		if (AD7 > 200)
 		{
-			return front;		//å‰å€¾
+			return front;		//Ç°Çã
 		}
 		else
 		{
@@ -544,11 +544,11 @@ int SStand()//æ£€æµ‹æœºå™¨çŠ¶æ€å‡½æ•°
 	}
 	else
 	{
-		return others;		//è¾¹ç¼˜çŠ¶æ€
+		return others;		//±ßÔµ×´Ì¬
 	}
 }
 
-void SetGray()//æ ‡å®šç°åº¦
+void SetGray()//±ê¶¨»Ò¶È
 {
 	int i = 0;
 	for (i = 0; i < 150; i++)
@@ -556,8 +556,8 @@ void SetGray()//æ ‡å®šç°åº¦
 		iAD5 += MFGetAD(5);
 		iAD6 += MFGetAD(6);
 	}
-	iAD5 = iAD5 / 150;//åç°åº¦	
-	iAD6 = iAD6 / 150;//å‰ç°åº¦
+	iAD5 = iAD5 / 150;//ºó»Ò¶È	
+	iAD6 = iAD6 / 150;//Ç°»Ò¶È
 }
 
 int Location()
@@ -578,7 +578,7 @@ int Location()
 	}
 }
 
-void lubo()//æ»¤æ³¢
+void lubo()//ÂË²¨
 {
 	AD0 = 0;
 	AD1 = 0;
@@ -668,78 +668,78 @@ void lubo()//æ»¤æ³¢
 }
 
 
-int Edge()//æ£€æµ‹è¾¹ç¼˜å’Œæ•Œäºº
+int Edge()//¼ì²â±ßÔµºÍµĞÈË
 {
 	lubo();
 	//if (AD5 <= sAD || AD6 <= sAD)
-	//å¦‚æœåˆ°è¾¹
+	//Èç¹ûµ½±ß
 	if (AD6<==iAD6)
 	{
 		return bianyuan;
 	}
 	if ((IO7 == 0) || (IO9 == 0) || (IO4 == 0) || (IO6 == 0))
 	{
-		//åä¸¤ä¸ªåˆ°è¾¹
+		//ºóÁ½¸öµ½±ß
 		if ((IO7 == 1) && (IO9 == 1) && (IO4 == 0) && (IO6 == 0))
 		{
 			return houbianyuan;
 		}
-		//å‰ä¸¤ä¸ªåˆ°è¾¹
+		//Ç°Á½¸öµ½±ß
 		else if ((IO7 == 0) && (IO9 == 0) && (IO4 == 1) && (IO6 == 1))
 		{
 			return qianbianyuan;
 		}
-		//å·¦ä¸¤ä¸ªåˆ°è¾¹
+		//×óÁ½¸öµ½±ß
 		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 0) && (IO6 == 1))
 		{
 			return zuobianyuan;
 		}
-		//å³ä¸¤ä¸ªåˆ°è¾¹
+		//ÓÒÁ½¸öµ½±ß
 		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 1) && (IO6 == 0))
 		{
 			return youbianyuan;
 		}
-		//å‰å·¦åˆ°è¾¹
+		//Ç°×óµ½±ß
 		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 1) && (IO6 == 1))
 		{
 			return qianzuodaobian;
 		}
-		//å‰å³åˆ°è¾¹
+		//Ç°ÓÒµ½±ß
 		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 1) && (IO6 == 1))
 		{
 			return qianyoudaobian;
 		}
-		//åå·¦åˆ°è¾¹
+		//ºó×óµ½±ß
 		else if ((IO7 == 1) && (IO9 == 1) && (IO4 == 0) && (IO6 == 1))
 		{
 			return houzuodaobian;
 		}
-		//åå³åˆ°è¾¹
+		//ºóÓÒµ½±ß
 		else if ((IO7 == 1) && (IO9 == 1) && (IO4 == 1) && (IO6 == 0))
 		{
 			return houyoudaobian;
 		}
-		//å·¦å‰è§’
+		//×óÇ°½Ç
 		else if ((IO7 == 0) && (IO9 == 0) && (IO4 == 0) && (IO6 == 1))
 		{
 			return zuoqianjiao;
 		}
-		//å·¦åè§’
+		//×óºó½Ç
 		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 0) && (IO6 == 0))
 		{
 			return zuohoujiao;
 		}
-		//å³å‰è§’
+		//ÓÒÇ°½Ç
 		else if ((IO7 == 0) && (IO9 == 0) && (IO4 == 1) && (IO6 == 0))
 		{
 			return youqianjiao;
 		}
-		//å³åè§’
+		//ÓÒºó½Ç
 		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 0) && (IO6 == 0))
 		{
 			return youhoujiao;
 		}
-		//æ— è¾¹ç¼˜
+		//ÎŞ±ßÔµ
 
 	}
 	else
@@ -747,7 +747,7 @@ int Edge()//æ£€æµ‹è¾¹ç¼˜å’Œæ•Œäºº
 		return nobianyuan;
 	}
 }
-void StandA()//å‰èµ·ç«‹
+void StandA()//Ç°ÆğÁ¢
 {
 	Defaction();
 	DelayMS(1000);
@@ -775,7 +775,7 @@ void StandA()//å‰èµ·ç«‹
 	GetMove(500, true, 30);
 }
 
-void StandB()//åèµ·ç«‹
+void StandB()//ºóÆğÁ¢
 {
 	Defaction();
 	DelayMS(1000);
@@ -864,7 +864,7 @@ void StandB()//åèµ·ç«‹
 }
 
 
-void Attack1()//æ”»å‡»åŠ¨ä½œ1
+void Attack1()//¹¥»÷¶¯×÷1
 {
 	EndMove();
 	MFSetServoPos(1, 780, 1000);

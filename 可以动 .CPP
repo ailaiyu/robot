@@ -20,7 +20,7 @@ void StandA();//前起立
 void StandB();//后起立
 void TestMove();//移动测试
 void Attack1();//攻击动作1
-
+void SetGray();//灰度标定
 
 int AD = 0;//AD转换
 

@@ -681,32 +681,32 @@ int Edge()//检测边缘和敌人
 	if ((IO7 == 1) || (IO9 == 1) || (IO4 == 1) || (IO6 == 1))
 	{
 		//后两个到边
-		if ((IO7 == 1) && (IO9 == 1) && (IO4 == 0) && (IO6 == 0))
+		if ((IO7 == 0) && (IO9 == 0) && (IO4 == 1) && (IO6 == 1))
 		{
 			return houbianyuan;
 		}
 		//前两个到边
-		else if ((IO7 == 0) && (IO9 == 0) && (IO4 == 1) && (IO6 == 1))
+		else if ((IO7 ==1) && (IO9 == 1) && (IO4 == 0) && (IO6 == 0))
 		{
 			return qianbianyuan;
 		}
 		//左两个到边
-		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 0) && (IO6 == 1))
+		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 1) && (IO6 == 0))
 		{
 			return zuobianyuan;
 		}
 		//右两个到边
-		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 1) && (IO6 == 0))
+		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 0) && (IO6 == 1))
 		{
 			return youbianyuan;
 		}
 		//前左到边
-		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 1) && (IO6 == 1))
+		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 0) && (IO6 == 0))
 		{
 			return qianzuodaobian;
 		}
 		//前右到边
-		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 1) && (IO6 == 1))
+		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 0) && (IO6 == 0))
 		{
 			return qianyoudaobian;
 		}

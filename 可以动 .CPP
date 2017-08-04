@@ -711,37 +711,35 @@ int Edge()//检测边缘和敌人
 			return qianyoudaobian;
 		}
 		//后左到边
-		else if ((IO7 == 1) && (IO9 == 1) && (IO4 == 0) && (IO6 == 1))
+		else if ((IO7 == 0) && (IO9 == 0) && (IO4 == 1) && (IO6 == 0))
 		{
 			return houzuodaobian;
 		}
 		//后右到边
-		else if ((IO7 == 1) && (IO9 == 1) && (IO4 == 1) && (IO6 == 0))
+		else if ((IO7 == 0) && (IO9 == 0) && (IO4 == 0) && (IO6 == 1))
 		{
 			return houyoudaobian;
 		}
 		//左前角
-		else if ((IO7 == 0) && (IO9 == 0) && (IO4 == 0) && (IO6 == 1))
+		else if ((IO7 == 1) && (IO9 == 1) && (IO4 == 1) && (IO6 == 0))
 		{
 			return zuoqianjiao;
 		}
 		//左后角
-		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 0) && (IO6 == 0))
+		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 1) && (IO6 == 1))
 		{
 			return zuohoujiao;
 		}
 		//右前角
-		else if ((IO7 == 0) && (IO9 == 0) && (IO4 == 1) && (IO6 == 0))
+		else if ((IO7 == 1) && (IO9 == 1) && (IO4 == 0) && (IO6 == 1))
 		{
 			return youqianjiao;
 		}
 		//右后角
-		else if ((IO7 == 1) && (IO9 == 0) && (IO4 == 0) && (IO6 == 0))
+		else if ((IO7 == 0) && (IO9 == 1) && (IO4 == 1) && (IO6 == 1))
 		{
 			return youhoujiao;
 		}
-		//无边缘
-
 	}
 	else
 	{

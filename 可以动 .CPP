@@ -111,11 +111,23 @@ int main()
 		State = SStand();//检测倾倒
 		if (goback==0)
 		{
-			Move(-400,400)
+			if (Speed <= 250)
+			{
+				GetMove(500, true, 50);
+			}
+			Move(500, 0);
+			DelayMS(10);
 		}
 		else if (goback==1)
 		{
+			EndMove();
+			GetMove(-400.false,50);
 			Move(-400, 400);
+			DelayMS(800);
+			EndMove();
+			GetMove(500.false, 50);
+			Move(500, 0);
+			DelayMS(500);
 		}
 		//switch (State)
 		//{

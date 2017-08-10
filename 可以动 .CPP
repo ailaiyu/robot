@@ -108,8 +108,9 @@ int main()
 
 	while (true)
 	{
-		State = SStand();//检测倾倒
-		if (goback==0)
+	//	State = SStand();//检测倾倒
+		lubo();
+		if (goback == 0)
 		{
 			if (Speed <= 250)
 			{
@@ -118,14 +119,14 @@ int main()
 			Move(500, 0);
 			DelayMS(10);
 		}
-		else if (goback==1)
+		else if (goback == 1)
 		{
 			EndMove();
-			GetMove(-400.false,50);
+			GetMove(-400,false,50);
 			Move(-400, 400);
 			DelayMS(800);
 			EndMove();
-			GetMove(500.false, 50);
+			GetMove(500,false, 50);
 			Move(500, 0);
 			DelayMS(500);
 		}
@@ -450,7 +451,7 @@ void EndMove()
 		MFSetServoRotaSpd(9, -Speed);
 		MFSetServoRotaSpd(10, Speed);
 		MFServoAction();
-		DelayMS(100);
+		DelayMS(80);
 		if (Speed>0)
 		{
 			Speed -= 70;
@@ -574,13 +575,13 @@ int SStand()//检测机器状态函数
 void SetGray()//标定灰度
 {
 	int i = 0;
-	for (i = 0; i < 150; i++)
+	for (i = 0; i < 50; i++)
 	{
 		iAD5 += MFGetAD(5);
 		iAD6 += MFGetAD(6);
 	}
-	iAD5 = iAD5 / 150;//后灰度	
-	iAD6 = iAD6 / 150;//前灰度
+	iAD5 = iAD5 / 50;//后灰度	
+	iAD6 = iAD6 / 50;//前灰度
 }
 
 int Location()
@@ -704,10 +705,6 @@ int Edge()//检测边缘和敌人
 	lubo();
 	//if (AD5 <= sAD || AD6 <= sAD)
 	//如果到边
-	if (AD6<=iAD6)
-	{
-		return bianyuan;
-	}
 	if ((IO7 == 1) || (IO9 == 1) || (IO4 == 1) || (IO6 == 1))
 	{
 		//后两个到边

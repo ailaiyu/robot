@@ -158,9 +158,12 @@ void doit()//没倒情况场上执行
 	switch (nEdge)
 	{
 	case houbianyuan:
-		EndMove();
 		for (u = 0; u < 50; u++)
 		{//前进
+			if (u<1)
+			{
+				EndMove();
+			}
 			Move(400, 0);
 			MFServoAction();
 			DelayMS(10);
@@ -183,13 +186,16 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case qianbianyuan:
-		EndMove();
 		for (u = 0; u < 50; u++)
 		{//	//后退
+			if (u<1)
+			{
+				EndMove();
+			}
 			Move(-550, 0);
 			MFServoAction();
 			DelayMS(10);
-			if (daobian() == 1)
+			if (daobian() == 0)
 			{
 				break;
 			}
@@ -207,9 +213,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case zuobianyuan:
-		EndMove();
 		for (u = 0; u < 100; u++)
 		{//	//右转
+			if (u<1)
+			{
+				EndMove();
+			}
 			MFSetServoRotaSpd(9, 600);
 			MFSetServoRotaSpd(10, 600);
 			MFServoAction();
@@ -231,9 +240,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case youbianyuan:
-		EndMove();
 		for (u = 0; u < 100; u++)
 		{//	//左转
+			if (u<1)
+			{
+				EndMove();
+			}
 			MFSetServoRotaSpd(9, -600);
 			MFSetServoRotaSpd(10, -600);
 			MFServoAction();
@@ -255,13 +267,16 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case qianzuodaobian:
-		EndMove();
 		for (u = 0; u < 50; u++)
 		{//后退   
+			if (u<1)
+			{
+				EndMove();
+			}
 			Move(-550, 0);
 			MFServoAction();
 			DelayMS(10);
-			if (daobian() == 1)
+			if (daobian() == 0)
 			{
 				break;
 			}
@@ -279,14 +294,16 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case qianyoudaobian:
-		EndMove();
-
 		for (u = 0; u < 50; u++)
 		{////后退
+			if (u<1)
+			{
+				EndMove();
+			}
 			Move(-550, 0);
 			MFServoAction();
 			DelayMS(10);
-			if (daobian() == 1)
+			if (daobian() == 0)
 			{
 				break;
 			}
@@ -304,9 +321,12 @@ void doit()//没倒情况场上执行
 		};
 		break;
 	case houzuodaobian:
-		EndMove();
 		for (u = 0; u < 50; u++)
 		{//前进
+			if (u<1)
+			{
+				EndMove();
+			}
 			Move(400, 0);
 			MFServoAction();
 			DelayMS(10);
@@ -328,9 +348,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case houyoudaobian:
-		EndMove();
 		for (u = 0; u < 50; u++)
 		{//前进
+			if (u<1)
+			{
+				EndMove();
+			}
 			Move(400, 0);;
 			MFServoAction();
 			DelayMS(10);
@@ -340,7 +363,7 @@ void doit()//没倒情况场上执行
 			}
 		}
 		for (u = 0; u < 40; u++)
-		{//左转      
+		{//左转     
 			MFSetServoRotaSpd(9, -600);
 			MFSetServoRotaSpd(10, -600);
 			MFServoAction();
@@ -352,23 +375,29 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case zuoqianjiao:
-		EndMove();
 		for (u = 0; u < 40; u++)
 		{//后退右转  
+			if (u<1)
+			{
+				EndMove();
+			}
 			MFSetServoRotaSpd(9, 600);
 			MFSetServoRotaSpd(10, -400);
 			MFServoAction();
 			DelayMS(10);
-			if (daobian() == 1)
+			if (daobian() == 0)
 			{
 				break;
 			}
 		}
 		break;
 	case zuohoujiao:
-		EndMove();
 		for (u = 0; u < 40; u++)
 		{//前行右转  
+			if (u<1)
+			{
+				EndMove();
+			}
 			MFSetServoRotaSpd(9, -400);
 			MFSetServoRotaSpd(10, 600);
 			MFServoAction();
@@ -380,25 +409,29 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case youqianjiao:
-		EndMove();
-
 		for (u = 0; u < 40; u++)
 		{//后退左转 
+			if (u<1)
+			{
+				EndMove();
+			}
 			MFSetServoRotaSpd(9, 400);
 			MFSetServoRotaSpd(10, -600);
 			MFServoAction();
 			DelayMS(10);
-			if (daobian() == 1)
+			if (daobian() == 0)
 			{
 				break;
 			}
 		}
 		break;
-	case youhoujiao:
-		EndMove();
-
+	case youhoujiao:		
 		for (u = 0; u < 40; u++)
 		{//前行左转   
+			if (u<1)
+			{
+				EndMove();
+			}
 			MFSetServoRotaSpd(9, -600);
 			MFSetServoRotaSpd(10, 400);
 			MFServoAction();
@@ -571,7 +604,7 @@ void EndMove()
 		MFSetServoRotaSpd(9, -Speed);
 		MFSetServoRotaSpd(10, Speed);
 		MFServoAction();
-		DelayMS(60);
+		DelayMS(40);
 		if (Speed>0)
 		{
 			Speed -= 70;
@@ -821,15 +854,20 @@ void lubo()//滤波
 }
 
 
-int daobian()//边缘检测，回传是否到边，1到边
+int daobian()//边缘检测，回传是否到边，1前到边。0后到边
 {
-	if ((IO7 == 1) || (IO9 == 1) || (IO4 == 1) || (IO6 == 1))
+	lubo();
+	if (((IO7 == 1) || (IO9 == 1)) && ((IO4 == 0) || (IO6 == 0)))
 	{
 		return 1;
 	}
-	else
+	else if (((IO7 == 0) || (IO9 == 0)) && ((IO4 == 1) || (IO6 == 1)))
 	{
 		return 0;
+	}
+	else
+	{
+		return 2;
 	}
 }
 

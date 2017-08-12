@@ -260,12 +260,12 @@ int main()
 						GetMove(500, true, 50);
 					}
 					Move(500, 0);
-					DelayMS(10);
+					DelayMS(15);
 				}
 				else if (k>100)
 				{
 					Move(100, 500);
-					DelayMS(10);
+					DelayMS(15);
 					if (k >= 140)
 					{
 						k = 0;
@@ -284,8 +284,8 @@ int main()
 			DelayMS(100);
 			StandA();
 			break;
-		case others:
-			break;
+		/*case others:
+			break;*/
 		}
 	/*	if (goback == 0)
 		{
@@ -363,7 +363,6 @@ void Getstage()//上台
 	MFServoAction();
 	DelayMS(1000);
 	Moves(700, 1000);//上台速度、时长控制
-	DelayMS(600);
 	EndMove();
 	MFSetServoPos(7, 530, 512);
 	MFSetServoPos(8, 507, 512);
@@ -798,7 +797,7 @@ void StandA()//前起立
 	MFServoAction();
 	DelayMS(1000);
 	Defaction();
-	GetMove(500, true, 30);
+	//GetMove(500, true, 30);
 }
 
 void StandB()//后起立
@@ -886,7 +885,7 @@ void StandB()//后起立
 	MFServoAction();
 	DelayMS(1000);
 	Defaction();
-	GetMove(500, true, 30);
+//	GetMove(500, true, 30);
 }
 
 

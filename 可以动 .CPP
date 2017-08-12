@@ -118,8 +118,7 @@ int main()
 			case houbianyuan:
 				EndMove();
 				//前进
-				MFSetServoRotaSpd(9, 400);
-				MFSetServoRotaSpd(10, -400);
+				Move(400, 0);
 				MFServoAction();
 				DelayMS(500);
 				//右转                  
@@ -131,8 +130,7 @@ int main()
 			case qianbianyuan:
 				EndMove();
 				//后退
-				MFSetServoRotaSpd(9, -550);
-				MFSetServoRotaSpd(10, 550);
+				Move(-550, 0);
 				MFServoAction();
 				DelayMS(500);
 				//右转                  
@@ -149,8 +147,7 @@ int main()
 				MFServoAction();
 				DelayMS(1000);
 				//前进
-				MFSetServoRotaSpd(9, 400);
-				MFSetServoRotaSpd(10, -400);
+				Move(400, 0);
 				MFServoAction();
 				DelayMS(400);
 				break;
@@ -162,16 +159,14 @@ int main()
 				MFServoAction();
 				DelayMS(1000);
 				//前进
-				MFSetServoRotaSpd(9, 400);
-				MFSetServoRotaSpd(10, -400);
+				Move(400, 0);
 				MFServoAction();
 				DelayMS(400);
 				break;
 			case qianzuodaobian:
 				EndMove();
 				//后退                 
-				MFSetServoRotaSpd(9, -550);
-				MFSetServoRotaSpd(10, 550);
+				Move(-550, 0);
 				MFServoAction();
 				DelayMS(500);
 				//右转                    
@@ -183,8 +178,7 @@ int main()
 			case qianyoudaobian:
 				EndMove();
 				//后退                    
-				MFSetServoRotaSpd(9, -550);
-				MFSetServoRotaSpd(10, 550);
+				Move(-550, 0);
 				MFServoAction();
 				DelayMS(500);
 				//左转                    ;
@@ -196,8 +190,7 @@ int main()
 			case houzuodaobian:
 				EndMove();
 				//前进                  
-				MFSetServoRotaSpd(9, 400);
-				MFSetServoRotaSpd(10, -400);
+				Move(400, 0);
 				MFServoAction();
 				DelayMS(500);
 				//右转                   
@@ -209,8 +202,7 @@ int main()
 			case houyoudaobian:
 				EndMove();
 				//前进                   
-				MFSetServoRotaSpd(9, 400);
-				MFSetServoRotaSpd(10, -400);
+				Move(400, 0);;
 				MFServoAction();
 				DelayMS(500);
 				//左转                 
@@ -222,32 +214,32 @@ int main()
 			case zuoqianjiao:
 				EndMove();
 				//后退右转                   
-				MFSetServoRotaSpd(9, -600);
-				MFSetServoRotaSpd(10, 400);
+				MFSetServoRotaSpd(9, 600);
+				MFSetServoRotaSpd(10, -400);
 				MFServoAction();
 				DelayMS(400);
 				break;
 			case zuohoujiao:
 				EndMove();
 				//前行右转                 
-				MFSetServoRotaSpd(9, 500);
-				MFSetServoRotaSpd(10, -300);
+				MFSetServoRotaSpd(9, -400);
+				MFSetServoRotaSpd(10, 600);
 				MFServoAction();
 				DelayMS(400);
 				break;
 			case youqianjiao:
 				EndMove();
-				//后退右转                   
-				MFSetServoRotaSpd(9, -400);
-				MFSetServoRotaSpd(10, 600);
+				//后退左转                   
+				MFSetServoRotaSpd(9, 400);
+				MFSetServoRotaSpd(10, -600);
 				MFServoAction();
 				DelayMS(400);
 				break;
 			case youhoujiao:
 				EndMove();
 				//前行左转                
-				MFSetServoRotaSpd(9, 300);
-				MFSetServoRotaSpd(10, -500);
+				MFSetServoRotaSpd(9, -600);
+				MFSetServoRotaSpd(10, 400);
 				MFServoAction();
 				DelayMS(400);
 				break;

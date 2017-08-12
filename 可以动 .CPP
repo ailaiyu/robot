@@ -441,7 +441,7 @@ void EndMove()
 		MFSetServoRotaSpd(9, -Speed);
 		MFSetServoRotaSpd(10, Speed);
 		MFServoAction();
-		DelayMS(80);
+		DelayMS(60);
 		if (Speed>0)
 		{
 			Speed -= 70;

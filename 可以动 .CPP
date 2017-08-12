@@ -114,7 +114,7 @@ int main()
 		switch (State)
 		{
 		case no:
-		
+			doit();
 			break;
 		case back:
 			Move(0, 0);

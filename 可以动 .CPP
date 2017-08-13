@@ -9,7 +9,7 @@ int Initaction();//初始动作（直立不动）
 void Defaction();//默认动作（台上默认动作）
 void Move(int MoveSpeed, int turn);//运动函数 go时Speed为正前进，Style分left right go，分别为左转右转直行
 void GetMove(int GetSpeed, int Stop, int sa);//起步,Stop为true时表示检测无信号时终止起步
-void EndMove();//停止运动
+void EndMove(int ST);//停止运动
 void Moves(int MovesSpeed, int Stime);//前进，（速度、时间）
 void Switch();//软开关
 void Getstage();//上台
@@ -44,9 +44,12 @@ int AD5 = 0;//灰度后
 int AD6 = 0;//灰度前
 int AD7 = 0;
 
+
 int iAD5 = 0;//后灰度标定
 int iAD6 = 0;//前灰度标定
 
+
+#define c 50  //doit 里的循环次数
 			 /*********************************************************************/
 
 #define dAD 100  
@@ -67,7 +70,7 @@ int iAD6 = 0;//前灰度标定
 #define chaoqian 1
 #define chaohou 2
 #define bianyuan 1
-#define nobianyuan 0
+#define nodiren 0
 #define qianbianyuan 2
 #define houbianyuan 3
 #define zuobianyuan 12
@@ -80,13 +83,19 @@ int iAD6 = 0;//前灰度标定
 #define zuohoujiao 9
 #define youqianjiao 10 
 #define youhoujiao 11
+
 #define attack 9
+#define qianbian 14
+#define zuobian 15
+#define youbian 16
+#define houbian 17
 
 int Speed = 0;//速度值
 int State = 1;//倾倒状态，默认1没倒
 int nEdge = 0;//边缘初始态
 int k = 0;
 int u;
+int x = 0;
 /*
 ************************************************
 机器人右边为电机9号，前进为-，后退+
@@ -140,11 +149,11 @@ int main()
 		}
 		else if (goback == 1)
 		{
-			EndMove();
+			EndMove(30);
 			GetMove(-400, false, 50);
 			Move(-500, 400);
 			DelayMS(800);
-			EndMove();
+			EndMove(30);
 			GetMove(500, false, 50);
 			Move(500, 0);
 			DelayMS(500);
@@ -158,11 +167,12 @@ void doit()//没倒情况场上执行
 	switch (nEdge)
 	{
 	case houbianyuan:
+		k = 0;
 		for (u = 0; u < 50; u++)
 		{//前进
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			Move(400, 0);
 			MFServoAction();
@@ -173,24 +183,44 @@ void doit()//没倒情况场上执行
 			}
 		}
 		//右转         
-		for (u = 0; u < 40; u++)
-		{//前进
-			MFSetServoRotaSpd(9, 600);
-			MFSetServoRotaSpd(10, 600);
-			MFServoAction();
-			DelayMS(10);
-			if (daobian() == 1)
-			{
-				break;
-			}
+		if (x==0)
+		{
+			for (u = 0; u < c; u++)
+			{//前进
+				MFSetServoRotaSpd(9, 600);
+				MFSetServoRotaSpd(10, 600);
+				MFServoAction();
+				DelayMS(10);
+				if (daobian() == 1)
+				{
+					break;
+				}
+			}	
+			x = 1;
 		}
+		else if(x==1)
+		{
+			for (u = 0; u < c; u++)
+			{//前进
+				MFSetServoRotaSpd(9, -600);
+				MFSetServoRotaSpd(10, -600);
+				MFServoAction();
+				DelayMS(10);
+				if (daobian() == 1)
+				{
+					break;
+				}
+			}
+			x = 0;
+		}		
 		break;
 	case qianbianyuan:
+		k = 0;
 		for (u = 0; u < 50; u++)
 		{//	//后退
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			Move(-550, 0);
 			MFServoAction();
@@ -200,7 +230,7 @@ void doit()//没倒情况场上执行
 				break;
 			}
 		}
-		for (u = 0; u < 40; u++)
+		for (u = 0; u < c; u++)
 		{////右转
 			MFSetServoRotaSpd(9, 600);
 			MFSetServoRotaSpd(10, 600);
@@ -213,11 +243,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case zuobianyuan:
+		k = 0;
 		for (u = 0; u < 100; u++)
 		{//	//右转
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			MFSetServoRotaSpd(9, 600);
 			MFSetServoRotaSpd(10, 600);
@@ -228,7 +259,7 @@ void doit()//没倒情况场上执行
 				break;
 			}
 		}
-		for (u = 0; u < 40; u++)
+		for (u = 0; u < c; u++)
 		{//前进
 			Move(400, 0);
 			MFServoAction();
@@ -240,11 +271,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case youbianyuan:
+		k = 0;
 		for (u = 0; u < 100; u++)
 		{//	//左转
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			MFSetServoRotaSpd(9, -600);
 			MFSetServoRotaSpd(10, -600);
@@ -255,7 +287,7 @@ void doit()//没倒情况场上执行
 				break;
 			}
 		}
-		for (u = 0; u < 40; u++)
+		for (u = 0; u < c; u++)
 		{//前进
 			Move(400, 0);
 			MFServoAction();
@@ -267,11 +299,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case qianzuodaobian:
+		k = 0;
 		for (u = 0; u < 50; u++)
 		{//后退   
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			Move(-550, 0);
 			MFServoAction();
@@ -281,7 +314,7 @@ void doit()//没倒情况场上执行
 				break;
 			}
 		}
-		for (u = 0; u < 40; u++)
+		for (u = 0; u < c; u++)
 		{//右转 
 			MFSetServoRotaSpd(9, 600);
 			MFSetServoRotaSpd(10, 600);
@@ -294,11 +327,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case qianyoudaobian:
+		k = 0;
 		for (u = 0; u < 50; u++)
 		{////后退
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			Move(-550, 0);
 			MFServoAction();
@@ -308,7 +342,7 @@ void doit()//没倒情况场上执行
 				break;
 			}
 		}
-		for (u = 0; u < 40; u++)
+		for (u = 0; u < c; u++)
 		{	//左转      
 			MFSetServoRotaSpd(9, -600);
 			MFSetServoRotaSpd(10, -600);
@@ -321,11 +355,12 @@ void doit()//没倒情况场上执行
 		};
 		break;
 	case houzuodaobian:
+		k = 0;
 		for (u = 0; u < 50; u++)
 		{//前进
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			Move(400, 0);
 			MFServoAction();
@@ -335,7 +370,7 @@ void doit()//没倒情况场上执行
 				break;
 			}
 		}
-		for (u = 0; u < 40; u++)
+		for (u = 0; u < c; u++)
 		{	//右转   
 			MFSetServoRotaSpd(9, 600);
 			MFSetServoRotaSpd(10, 600);
@@ -348,11 +383,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case houyoudaobian:
+		k = 0;
 		for (u = 0; u < 50; u++)
 		{//前进
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			Move(400, 0);;
 			MFServoAction();
@@ -362,7 +398,7 @@ void doit()//没倒情况场上执行
 				break;
 			}
 		}
-		for (u = 0; u < 40; u++)
+		for (u = 0; u < c; u++)
 		{//左转     
 			MFSetServoRotaSpd(9, -600);
 			MFSetServoRotaSpd(10, -600);
@@ -375,11 +411,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case zuoqianjiao:
-		for (u = 0; u < 40; u++)
+		k = 0;
+		for (u = 0; u < c; u++)
 		{//后退右转  
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			MFSetServoRotaSpd(9, 600);
 			MFSetServoRotaSpd(10, -400);
@@ -392,11 +429,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case zuohoujiao:
-		for (u = 0; u < 40; u++)
+		k = 0;
+		for (u = 0; u < c; u++)
 		{//前行右转  
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			MFSetServoRotaSpd(9, -400);
 			MFSetServoRotaSpd(10, 600);
@@ -409,11 +447,12 @@ void doit()//没倒情况场上执行
 		}
 		break;
 	case youqianjiao:
-		for (u = 0; u < 40; u++)
+		k = 0;
+		for (u = 0; u < c; u++)
 		{//后退左转 
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			MFSetServoRotaSpd(9, 400);
 			MFSetServoRotaSpd(10, -600);
@@ -425,12 +464,13 @@ void doit()//没倒情况场上执行
 			}
 		}
 		break;
-	case youhoujiao:		
-		for (u = 0; u < 40; u++)
+	case youhoujiao:	
+		k = 0;
+		for (u = 0; u < c; u++)
 		{//前行左转   
 			if (u<1)
 			{
-				EndMove();
+				EndMove(30);
 			}
 			MFSetServoRotaSpd(9, -600);
 			MFSetServoRotaSpd(10, 400);
@@ -442,7 +482,7 @@ void doit()//没倒情况场上执行
 			}
 		}
 		break;
-	case nobianyuan:
+	case nodiren:
 		k++;
 		if (k <= 100)
 		{
@@ -462,6 +502,86 @@ void doit()//没倒情况场上执行
 				k = 0;
 			}
 		}
+		break;
+	case qianbian:
+		k = 0;
+		//前灰度
+		//加速前进，攻击动作
+		Attack1();
+		for (u = 0; u < 30; u++)
+		{//前行左转   
+			if (u<1)
+			{
+				GetMove(1000, true, 30);
+			}
+			MFSetServoRotaSpd(9, -1000);
+			MFSetServoRotaSpd(10, 1000);
+			MFServoAction();
+			DelayMS(10);
+			if (daobian() == 1||AD6<=iAD6|| MFGetDigiInput(8)==1)
+			{
+				EndMove(25);
+				break;
+			}
+		}
+		//前进
+		Defaction();
+		break;
+		case zuobian:
+		//前灰度
+		//前进左转
+			k = 0;
+			for (u = 0; u < c; u++)
+			{//前行左转   
+				if (u < 1)
+				{
+					EndMove(30);
+				}
+				MFSetServoRotaSpd(9, -1000);
+				MFSetServoRotaSpd(10, -700);
+				MFServoAction();
+				DelayMS(20);
+				if (daobian() == 1)
+				{
+					break;
+				}
+			}
+			break;
+		case youbian:
+		//前灰度
+		//前进右转
+			k = 0;
+			for (u = 0; u < c; u++)
+			{//前行右转   
+				if (u<1)
+				{
+					EndMove(30);
+				}
+				MFSetServoRotaSpd(9, 700);
+				MFSetServoRotaSpd(10, 1000);
+				MFServoAction();
+				DelayMS(20);
+				if (daobian() == 1)
+				{
+					break;
+				}
+			}
+			break;
+	case houbian:
+		k = 0;
+		//前灰度
+		//加速前进，攻击动作
+		EndMove(30);
+		MFSetServoRotaSpd(9, 600);
+		MFSetServoRotaSpd(10, -600);
+		MFServoAction();
+		DelayMS(200);
+		//Attack1;
+		//前进
+		MFSetServoRotaSpd(9, 400);
+		MFSetServoRotaSpd(10, -400);
+		MFServoAction();
+		DelayMS(200);
 		break;
 	}
 }
@@ -518,7 +638,7 @@ void Getstage()//上台
 	MFServoAction();
 	DelayMS(1000);
 	Moves(700, 1000);//上台速度、时长控制
-	EndMove();
+	EndMove(30);
 	MFSetServoPos(7, 530, 512);
 	MFSetServoPos(8, 507, 512);
 	MFServoAction();
@@ -539,7 +659,7 @@ void Moves(int MovesSpeed, int Stime)//上台移动函数
 	Move(MovesSpeed, 0);
 	MFServoAction();
 	DelayMS(Stime);
-	EndMove();
+	EndMove(30);
 }
 
 void GetMove(int GetSpeed, int Stop, int sa)
@@ -594,7 +714,7 @@ int abs(int shu)
 }
 
 
-void EndMove()
+void EndMove(int ST)
 {
 	int i = 0;
 	int times = 0;
@@ -604,7 +724,7 @@ void EndMove()
 		MFSetServoRotaSpd(9, -Speed);
 		MFSetServoRotaSpd(10, Speed);
 		MFServoAction();
-		DelayMS(40);
+		DelayMS(ST);
 		if (Speed>0)
 		{
 			Speed -= 70;
@@ -617,6 +737,7 @@ void EndMove()
 	MFSetServoRotaSpd(9, 0);
 	MFSetServoRotaSpd(10, 0);
 	MFServoAction();
+	DelayMS(1-0);
 	Speed = 0;
 }
 
@@ -631,7 +752,7 @@ void TestMove()
 		{
 			Move(500, 0);
 		}
-		EndMove();
+		EndMove(30);
 	}
 	else
 	{
@@ -685,21 +806,20 @@ int SStand()//检测机器状态函数
 	AD = 0;
 	AD4 = 0;
 	AD7 = 0;
-	for (i = 0; i <10; i++)
+	for (i = 0; i <100; i++)
 	{
-		AD4 = MFGetAD(4);
-		AD += AD4;
+		AD4 += MFGetAD(4);
 		AD7 += MFGetAD(7);
 	}
-	AD = AD / 10;
-	AD7 = AD7 / 10;
-	if (AD4 > 200 && AD4 < 700)
+	AD4 = AD / 100;
+	AD7 = AD7 / 100;
+	if (AD4 > 200 && AD4 < 760)
 	{
 		return no;		//没有倒
 	}
 	else if (AD4 < 200)
 	{
-		if (AD7 > 200)
+		if (AD7 > 400)
 		{
 			return back;		//后倾
 		}
@@ -708,9 +828,9 @@ int SStand()//检测机器状态函数
 			return no;
 		}
 	}
-	else if (AD4 > 700)
+	else if (AD4 > 760)
 	{
-		if (AD7 > 200)
+		if (AD7 > 400)
 		{
 			return front;		//前倾
 		}
@@ -728,13 +848,13 @@ int SStand()//检测机器状态函数
 void SetGray()//标定灰度
 {
 	int i = 0;
-	for (i = 0; i < 20; i++)
+	for (i = 0; i < 200; i++)
 	{
 		iAD5 += MFGetAD(5);
 		iAD6 += MFGetAD(6);
 	}
-	iAD5 = iAD5 / 20;//后灰度	
-	iAD6 = iAD6 / 20;//前灰度
+	iAD5 = iAD5 / 200;//后灰度	
+	iAD6 = iAD6 / 200;//前灰度
 }
 
 int Location()
@@ -761,6 +881,7 @@ void lubo()//滤波
 	AD1 = 0;
 	AD2 = 0;
 	AD3 = 0;
+
 	AD5 = 0;
 	AD6 = 0;
 
@@ -771,7 +892,7 @@ void lubo()//滤波
 	IO8 = 0;
 	IO9 = 0;
 	int i = 0;
-	for (i = 0; i < 10; i++)
+	for (i = 0; i < 50; i++)
 	{
 		
 
@@ -779,6 +900,9 @@ void lubo()//滤波
 		AD2 += MFGetAD(2);
 		AD3 += MFGetAD(3);
 		AD0 += MFGetAD(0);
+
+		AD5 += MFGetAD(5);
+		AD6 += MFGetAD(6);
 
 		IO4 += MFGetDigiInput(4);
 		IO5 += MFGetDigiInput(5);
@@ -788,13 +912,12 @@ void lubo()//滤波
 		IO9 += MFGetDigiInput(9);
 	}
 
-	AD1 = AD1 / 10;
-	AD2 = AD2 / 10;
-	AD3 = AD3 / 10;
-	AD0 = AD0 / 10;
-
-	AD5 = MFGetAD(5);
-	AD6 = MFGetAD(6);
+	AD1 = AD1 / 50;
+	AD2 = AD2 / 50;
+	AD3 = AD3 / 50;
+	AD0 = AD0 / 50;
+	AD5 = AD5 / 50;
+	AD6 = AD6 / 50;
 	if (AD5 <= iAD5 || AD6 <= iAD6)
 	{
 		goback = 1;
@@ -941,7 +1064,34 @@ int Edge()//检测边缘和敌人
 	}
 	else
 	{
-		return nobianyuan;
+		if ((IO8 == 0) || (IO5 == 0) || (AD3 >= 65) || (AD1 >= 65))
+		{
+			//前边有敌人
+			if (IO8 == 0)
+			{
+				return qianbian;
+			}
+			//左边有敌人
+			else if (AD3 >= 65)
+			{
+			return zuobian;
+			}
+			//右边有敌人
+			else if (AD1 >= 65)
+			{
+			return youbian;
+			}
+			//后边有敌人
+		/*	else if (IO4 == 0)
+			{
+				return houbian;
+			}*/
+		}
+		else
+		{
+			return nodiren;
+		}
+		//return nobianyuan;
 	}
 }
 void StandA()//前起立
@@ -1063,20 +1213,20 @@ void StandB()//后起立
 
 void Attack1()//攻击动作1
 {
-	EndMove();
-	MFSetServoPos(1, 780, 1000);
-	MFSetServoPos(2, 553, 1000);
-	MFSetServoPos(3, 506, 1000);
-	MFSetServoPos(4, 214, 1000);
-	MFSetServoPos(5, 507, 1000);
-	MFSetServoPos(6, 530, 1000);
-	MFSetServoPos(7, 441, 1000);
-	MFSetServoPos(8, 593, 1000);
+	//EndMove(30);
+	MFSetServoPos(1, 765, 1000);
+	MFSetServoPos(2, 618, 1000);
+	MFSetServoPos(3, 552, 1000);
+	MFSetServoPos(4, 241, 1000);
+	MFSetServoPos(5, 440, 1000);
+	MFSetServoPos(6, 531, 1000);
+	MFSetServoPos(7, 509, 1000);
+	MFSetServoPos(8, 531, 1000);
 	MFServoAction();
-	DelayMS(1000);
-	GetMove(600, false, 30);
-	Move(800, 0);
-	DelayMS(500);
-	Defaction();
 	DelayMS(800);
+	//GetMove(600, false, 30);
+	//Move(800, 0);
+	//DelayMS(500);
+	//Defaction();
+	//DelayMS(800);
 }

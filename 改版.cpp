@@ -37,7 +37,7 @@ int IO9 = 0;//前右
 
 int AD0 = 0;//头
 int AD1 = 0;//右边
-int AD2 = 0;//前
+int AD2 = 0;//前  
 int AD3 = 0;//左边
 int AD4 = 0;//倾角
 int AD5 = 0;//灰度后
@@ -96,7 +96,6 @@ int nEdge = 0;//边缘初始态
 int k = 0;
 int u;
 int x = 0;
-int AA = 1;
 /*
 ************************************************
 机器人右边为电机9号，前进为-，后退+
@@ -120,17 +119,10 @@ int main()
 	Defaction();//默认动作
 	while (true)
 	{
-		
 		State = SStand();//检测倾倒
 		switch (State)
 		{
 		case no:
-			//AA = MFGetDigiInput(10);
-			//if (AA == 0)
-			//{
-			//	Switch();//软开关
-			//	Getstage();
-			//}
 			doit();
 			break;
 		case back:
@@ -527,7 +519,6 @@ void doit()//没倒情况场上执行
 			MFSetServoRotaSpd(10, 1000);
 			MFServoAction();
 			DelayMS(20);
-			Speed = 1000;
 			if (daobian() == 1 || MFGetDigiInput(8) == 1)
 			{
 				EndMove(25);
@@ -535,7 +526,6 @@ void doit()//没倒情况场上执行
 			}
 		}
 		//前进
-		EndMove(30);
 		Defaction();
 		break;
 	case zuobian:
@@ -1071,10 +1061,10 @@ int Edge()//检测边缘和敌人
 	}
 	else
 	{
-		if ((IO8 == 0) /*|| (IO5 == 0)*/ || (AD3 >= 65) || (AD1 >= 65))
+		if ((IO8 == 0) || (AD2 >= 200) /*|| (IO5 == 0)*/ || (AD3 >= 65) || (AD1 >= 65))
 		{
 			//前边有敌人
-			if (IO8 == 0 && AD3 <= 65 && AD1 <= 65)
+			if ((IO8 == 0 || AD2 >= 200) && AD3 <= 65 && AD1 <= 65)
 			{
 				return qianbian;
 			}

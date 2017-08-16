@@ -642,8 +642,7 @@
 		MFSetServoPos(8, 845, 512);
 		MFServoAction();
 		DelayMS(1000);
-		Moves(700, 700);//上台速度、时长控制
-		EndMove(40);
+		Moves(700, 550);//上台速度、时长控制
 		MFSetServoPos(7, 530, 512);
 		MFSetServoPos(8, 507, 512);
 		MFServoAction();
@@ -664,7 +663,7 @@
 		Move(MovesSpeed, 0);
 		MFServoAction();
 		DelayMS(Stime);
-		EndMove(30);
+		EndMove(50);
 	}
 
 	void GetMove(int GetSpeed, int Stop, int sa)
@@ -803,20 +802,20 @@
 		AD = 0;
 		AD4 = 0;
 		AD7 = 0;
-		for (i = 0; i <30; i++)
+		for (i = 0; i <20; i++)
 		{
 			AD4 += MFGetAD(4);
 			AD7 += MFGetAD(7);
 		}
-		AD4 = AD4 / 30;
-		AD7 = AD7 / 30;
+		AD4 = AD4 / 20;
+		AD7 = AD7 / 20;
 		if (AD4 >= 200 && AD4 <= 700)
 		{
 			return no;		//没有倒
 		}
 		else if (AD4 < 200)
 		{
-			if (AD7 > 250)
+			if (AD7 > 200)
 			{
 				return back;		//后倾
 			}
@@ -827,7 +826,7 @@
 		}
 		else if (AD4 > 700)
 		{
-			if (AD7 > 250)
+			if (AD7 > 200)
 			{
 				return front;		//前倾
 			}

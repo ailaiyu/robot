@@ -28,6 +28,7 @@ int goback = 0;//到边缘返
 
 int AD = 0;//AD转换
 
+int IO10 = 1;//重启上台
 int IO4 = 0;//后左
 int IO5 = 0;//后中
 int IO6 = 0;//后右
@@ -49,7 +50,7 @@ int iAD5 = 0;//后灰度标定
 int iAD6 = 0;//前灰度标定
 
 
-#define c 30  //doit 里的循环次数
+#define c 60  //doit 里的循环次数
 			 /*********************************************************************/
 
 #define dAD 100  
@@ -96,6 +97,10 @@ int nEdge = 0;//边缘初始态
 int k = 0;
 int u;
 int x = 0;
+int aa = 0;
+int gos = 500;
+int kk = 0;
+int kkk = 0;
 /*
 ************************************************
 机器人右边为电机9号，前进为-，后退+
@@ -112,7 +117,7 @@ int x = 0;
 int main()
 {
 	Init(); //初始化
-			//SetGray();//灰度标定
+	//SetGray();//灰度标定
 	Initaction();//初始动作
 	Switch();//软开关
 	Getstage();//上台
@@ -123,7 +128,28 @@ int main()
 		switch (State)
 		{
 		case no:
-			doit();
+			/*for (aa = 0; aa < 50; aa++)
+			{
+				IO10 += MFGetDigiInput(10);
+			}		*/	
+			IO5 = MFGetDigiInput(5);
+			if (IO5 == 0 )
+			{
+
+				MFSetServoRotaSpd(9, 100);
+				MFSetServoRotaSpd(10, 100);
+				Speed = 0;
+				MFServoAction();
+				DelayMS(20);
+				Switch();//软开关
+				Getstage();//上台
+				Defaction();//默认动作
+				doit();
+			}
+			else
+			{
+				doit();
+			}
 			break;
 		case back:
 			Move(0, 0);
@@ -244,59 +270,87 @@ void doit()//没倒情况场上执行
 		break;
 	case zuobianyuan:
 		k = 0;
-		for (u = 0; u < c; u++)
+		for (u = 0; u <1; u++)
 		{//	//右转
-			if (u<1)
+			if (u < 1)
 			{
 				EndMove(30);
 			}
-			MFSetServoRotaSpd(9, 0);
-			MFSetServoRotaSpd(10, 600);
-			MFServoAction();
-			DelayMS(20);
-			if (daobian() == 1)
-			{
-				break;
-			}
 		}
-		for (u = 0; u < c; u++)
-		{//前进
-			Move(400, 0);
-			MFServoAction();
-			DelayMS(20);
-			if (daobian() == 1)
-			{
-				break;
-			}
-		}
+		MFSetServoRotaSpd(9, 600);
+		MFSetServoRotaSpd(10, 600);
+		MFServoAction();
+		DelayMS(600);
+		Move(400, 0);
+		MFServoAction();
+		DelayMS(20);
+		//for (u = 0; u < c; u++)
+		//{//	//右转
+		//	if (u<1)
+		//	{
+		//		EndMove(30);
+		//	}
+		//	MFSetServoRotaSpd(9, 0);
+		//	MFSetServoRotaSpd(10, 600);
+		//	MFServoAction();
+		//	DelayMS(20);
+		//	if (daobian() == 1)
+		//	{
+		//		break;
+		//	}
+		//}
+		//for (u = 0; u < 25; u++)
+		//{//前进
+		//	Move(400, 0);
+		//	MFServoAction();
+		//	DelayMS(20);
+		//	if (daobian() == 1)
+		//	{
+		//		break;
+		//	}
+		//}
 		break;
 	case youbianyuan:
 		k = 0;
-		for (u = 0; u < c; u++)
-		{//	//左转
-			if (u<1)
+		for (u = 0; u <1; u++)
+		{//	//右转
+			if (u < 1)
 			{
 				EndMove(30);
 			}
-			MFSetServoRotaSpd(9, -600);
-			MFSetServoRotaSpd(10, 0);
-			MFServoAction();
-			DelayMS(20);
-			if (daobian() == 1)
-			{
-				break;
-			}
 		}
-		for (u = 0; u < c; u++)
-		{//前进
-			Move(400, 0);
-			MFServoAction();
-			DelayMS(20);
-			if (daobian() == 1)
-			{
-				break;
-			}
-		}
+		MFSetServoRotaSpd(9, -600);
+		MFSetServoRotaSpd(10, -600);
+		MFServoAction();
+		DelayMS(600);
+		Move(400, 0);
+		MFServoAction();
+		DelayMS(20);
+		//for (u = 0; u < c; u++)
+		//{//	//左转
+		//	if (u<1)
+		//	{
+		//		EndMove(30);
+		//	}
+		//	MFSetServoRotaSpd(9, -600);
+		//	MFSetServoRotaSpd(10, 0);
+		//	MFServoAction();
+		//	DelayMS(20);
+		//	if (daobian() == 1)
+		//	{
+		//		break;
+		//	}
+		//}
+		//for (u = 0; u < 25; u++)
+		//{//前进
+		//	Move(400, 0);
+		//	MFServoAction();
+		//	DelayMS(20);
+		//	if (daobian() == 1)
+		//	{
+		//		break;
+		//	}
+		//}
 		break;
 	case qianzuodaobian:
 		k = 0;
@@ -486,6 +540,26 @@ void doit()//没倒情况场上执行
 		/*k++;
 		if (k <= 100)
 		{*/
+		/*	if (AD6>(iAD6+200))
+			{
+				kk++;
+				kkk = 0;
+			}	
+			else
+			{
+				kk = 0;
+				kkk++;
+			}
+			if (kk>=20)
+			{
+				gos = 300;
+				kk = 60;
+			}
+			if (kkk>=20)
+			{
+				gos = 500;
+				kkk = 60;
+			}*/
 		if (Speed <= 250)
 		{
 			GetMove(500, true, 50);
@@ -519,7 +593,7 @@ void doit()//没倒情况场上执行
 			MFSetServoRotaSpd(10, 1000);
 			MFServoAction();
 			DelayMS(20);
-			if (daobian() == 1 || MFGetDigiInput(8) == 1)
+			if (daobian() == 1 || (MFGetDigiInput(8) == 1 && AD2<200))
 			{
 				EndMove(25);
 				break;
@@ -539,8 +613,8 @@ void doit()//没倒情况场上执行
 			{
 				EndMove(30);
 			}
-			MFSetServoRotaSpd(9, -600);
-			MFSetServoRotaSpd(10, -600);
+			MFSetServoRotaSpd(9, -700);
+			MFSetServoRotaSpd(10, -700);
 			MFServoAction();
 			DelayMS(20);
 			if (daobian() == 1)
@@ -560,8 +634,8 @@ void doit()//没倒情况场上执行
 			{
 				EndMove(30);
 			}
-			MFSetServoRotaSpd(9, 600);
-			MFSetServoRotaSpd(10, 600);
+			MFSetServoRotaSpd(9, 700);
+			MFSetServoRotaSpd(10, 700);
 			MFServoAction();
 			DelayMS(20);
 			if (daobian() == 1)
@@ -784,8 +858,12 @@ void Defaction()//默认动作（台上）
 	MFSetServoPos(4, 432, 512);
 	MFSetServoPos(5, 355, 512);
 	MFSetServoPos(6, 750, 512);
+	
+	MFSetServoRotaSpd(9, 100);
+	MFSetServoRotaSpd(10, 100);
+	Speed = 0;
 	MFServoAction();
-	DelayMS(500);
+	DelayMS(1000);
 }
 
 void Switch()//软开关
@@ -912,6 +990,8 @@ void lubo()//滤波
 	AD2 = AD2 / 50;
 	AD3 = AD3 / 50;
 	AD0 = AD0 / 50;
+	AD5 = AD5 / 50;
+	AD6 = AD6 / 50;
 	/*AD5 = AD5 / 50;
 	AD6 = AD6 / 50;
 

@@ -123,7 +123,24 @@
 			switch (State)
 			{
 			case no:
-				doit();
+				IO5 = MFGetDigiInput(5);
+				if (IO5 == 0)
+				{
+
+					MFSetServoRotaSpd(9, 100);
+					MFSetServoRotaSpd(10, 100);
+					Speed = 0;
+					MFServoAction();
+					DelayMS(20);
+					Switch();//软开关
+					Getstage();//上台
+					Defaction();//默认动作
+					doit();
+				}
+				else
+				{
+					doit();
+				}
 				break;
 			case back:
 				Move(0, 0);
@@ -244,59 +261,87 @@
 			break;
 		case zuobianyuan:
 			k = 0;
-			for (u = 0; u < c; u++)
+			for (u = 0; u <1; u++)
 			{//	//右转
-				if (u<1)
+				if (u < 1)
 				{
 					EndMove(30);
 				}
-				MFSetServoRotaSpd(9, 0);
-				MFSetServoRotaSpd(10, 600);
-				MFServoAction();
-				DelayMS(20);
-				if (daobian() == 1)
-				{
-					break;
-				}
 			}
-			for (u = 0; u < c; u++)
-			{//前进
-				Move(400, 0);
-				MFServoAction();
-				DelayMS(20);
-				if (daobian() == 1)
-				{
-					break;
-				}
-			}
+			MFSetServoRotaSpd(9, 600);
+			MFSetServoRotaSpd(10, 600);
+			MFServoAction();
+			DelayMS(600);
+			Move(400, 0);
+			MFServoAction();
+			DelayMS(20);
+			//for (u = 0; u < c; u++)
+			//{//	//右转
+			//	if (u<1)
+			//	{
+			//		EndMove(30);
+			//	}
+			//	MFSetServoRotaSpd(9, 0);
+			//	MFSetServoRotaSpd(10, 600);
+			//	MFServoAction();
+			//	DelayMS(20);
+			//	if (daobian() == 1)
+			//	{
+			//		break;
+			//	}
+			//}
+			//for (u = 0; u < c; u++)
+			//{//前进
+			//	Move(400, 0);
+			//	MFServoAction();
+			//	DelayMS(20);
+			//	if (daobian() == 1)
+			//	{
+			//		break;
+			//	}
+			//}
 			break;
 		case youbianyuan:
 			k = 0;
-			for (u = 0; u < c; u++)
-			{//	//左转
-				if (u<1)
+			for (u = 0; u <1; u++)
+			{//	//右转
+				if (u < 1)
 				{
 					EndMove(30);
 				}
-				MFSetServoRotaSpd(9, -600);
-				MFSetServoRotaSpd(10, 0);
-				MFServoAction();
-				DelayMS(20);
-				if (daobian() == 1)
-				{
-					break;
-				}
 			}
-			for (u = 0; u < c; u++)
-			{//前进
-				Move(400, 0);
-				MFServoAction();
-				DelayMS(20);
-				if (daobian() == 1)
-				{
-					break;
-				}
-			}
+			MFSetServoRotaSpd(9, -600);
+			MFSetServoRotaSpd(10, -600);
+			MFServoAction();
+			DelayMS(600);
+			Move(400, 0);
+			MFServoAction();
+			DelayMS(20);
+			//for (u = 0; u < c; u++)
+			//{//	//左转
+			//	if (u<1)
+			//	{
+			//		EndMove(30);
+			//	}
+			//	MFSetServoRotaSpd(9, -600);
+			//	MFSetServoRotaSpd(10, 0);
+			//	MFServoAction();
+			//	DelayMS(20);
+			//	if (daobian() == 1)
+			//	{
+			//		break;
+			//	}
+			//}
+			//for (u = 0; u < 25; u++)
+			//{//前进
+			//	Move(400, 0);
+			//	MFServoAction();
+			//	DelayMS(20);
+			//	if (daobian() == 1)
+			//	{
+			//		break;
+			//	}
+			//}
 			break;
 		case qianzuodaobian:
 			k = 0;
